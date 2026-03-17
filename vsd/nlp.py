@@ -7,8 +7,6 @@ Each NLP has:
   - Linear cost function (travel time)
 """
 
-from __future__ import annotations
-
 import logging
 import math
 import threading

@@ -1,7 +1,5 @@
 """VSDPath: holds a solved path with cost, params, and history generation."""
 
-from __future__ import annotations
-
 import math
 from dataclasses import dataclass
 from typing import Optional

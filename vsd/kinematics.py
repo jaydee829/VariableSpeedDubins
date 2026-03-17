@@ -3,8 +3,6 @@
 Exact port of VSDUtils_pathGeneration.cpp and VSDUtils_expandParamsShort.cpp.
 """
 
-from __future__ import annotations
-
 import math
 
 import numpy as np

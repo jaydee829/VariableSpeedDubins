@@ -4,8 +4,6 @@ Solves LSL, LSR, RSL, RSR, LRL, RLR at a given turning radius.
 Returns a list of DubinsPath objects (feasible or infeasible).
 """
 
-from __future__ import annotations
-
 import math
 from dataclasses import dataclass
 

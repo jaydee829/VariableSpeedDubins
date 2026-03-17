@@ -5,8 +5,6 @@ Indices 0-75 are the 76 VSD candidates (matching C++ indices 0-75).
 The 8 Dubins candidates (indices 76-83) are provided separately by dubins.py.
 """
 
-from __future__ import annotations
-
 # ---------------------------------------------------------------------------
 # Candidate list
 # ---------------------------------------------------------------------------

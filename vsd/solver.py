@@ -1,7 +1,5 @@
 """VSDSolver: parallel solve over all 84 candidates (76 VSD + 8 Dubins)."""
 
-from __future__ import annotations
-
 import os
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from typing import Optional

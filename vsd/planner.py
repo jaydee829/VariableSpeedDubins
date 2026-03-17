@@ -1,7 +1,5 @@
 """Multi-waypoint greedy planner — solves all legs in parallel."""
 
-from __future__ import annotations
-
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
