@@ -1,6 +1,7 @@
 MIT License
 
 Copyright (c) 2019 Artur Wolek
+Copyright (c) 2026 Justin Merrick
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

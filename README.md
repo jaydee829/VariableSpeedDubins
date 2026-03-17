@@ -60,6 +60,7 @@ The original C++ implementation is in `src/`. See [CLAUDE.md](CLAUDE.md) for bui
 
 Wolek, A., Cliff, E. M., & Woolsey, C. A. (2016). Time-optimal path planning for a kinematic car with variable speed controls. *Journal of Guidance, Control, and Dynamics*, 39(10), 2374–2390. [doi:10.2514/1.G001317](https://doi.org/10.2514/1.G001317)
 
-## Contact
+## Authors
 
-Artur Wolek — awolek@uncc.edu
+- **Artur Wolek** — original C++ library — awolek@uncc.edu
+- **Justin Merrick** ([@jaydee829](https://github.com/jaydee829)) — Python port — jaydee829@gmail.com
