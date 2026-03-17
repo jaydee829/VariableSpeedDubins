@@ -3,8 +3,14 @@
 from __future__ import annotations
 
 import os
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from typing import Optional
+
+try:
+    from threadpoolctl import threadpool_limits as _threadpool_limits
+    _HAS_THREADPOOLCTL = True
+except ImportError:  # pragma: no cover
+    _HAS_THREADPOOLCTL = False
 
 import numpy as np
 
@@ -20,6 +26,16 @@ _ALL_VSD_CANDIDATES = _make_candidate_list()
 
 
 _INF = float("inf")
+
+
+class _NullCtx:
+    """No-op context manager used when threadpoolctl is unavailable."""
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -51,6 +67,9 @@ class VSDSolver:
         n_samples: number of samples for initial guess (default 250)
         tol: IPOPT convergence tolerance (default 1e-7)
         n_workers: number of parallel workers (default = CPU count)
+        use_threads: use ThreadPoolExecutor instead of ProcessPoolExecutor
+            (default True).  Threads avoid process-spawn overhead on Windows
+            and work well because CasADi/IPOPT releases the GIL during solving.
     """
 
     def __init__(
@@ -59,11 +78,13 @@ class VSDSolver:
         n_samples: int = 250,
         tol: float = 1e-7,
         n_workers: Optional[int] = None,
+        use_threads: bool = True,
     ):
-        self.L_max     = L_max
-        self.n_samples = n_samples
-        self.tol       = tol
-        self.n_workers = n_workers or os.cpu_count() or 1
+        self.L_max       = L_max
+        self.n_samples   = n_samples
+        self.tol         = tol
+        self.n_workers   = n_workers or os.cpu_count() or 1
+        self.use_threads = use_threads
 
     def solve(self, problem: VSDProblem) -> list[VSDPath]:
         """Solve the problem and return all feasible, non-suboptimal paths.
@@ -137,8 +158,16 @@ class VSDSolver:
     def _parallel_vsd(self, args_list):
         if self.n_workers == 1:
             return [_solve_vsd_worker(a) for a in args_list]
+        Executor = ThreadPoolExecutor if self.use_threads else ProcessPoolExecutor
         results = [None] * len(args_list)
-        with ProcessPoolExecutor(max_workers=self.n_workers) as pool:
+        # Limit BLAS to 1 thread per worker so that n_workers concurrent IPOPT
+        # instances don't over-subscribe the CPU with their own thread pools.
+        ctx = (
+            _threadpool_limits(limits=1)
+            if _HAS_THREADPOOLCTL and self.use_threads
+            else _NullCtx()
+        )
+        with ctx, Executor(max_workers=self.n_workers) as pool:
             futures = {pool.submit(_solve_vsd_worker, a): i
                        for i, a in enumerate(args_list)}
             for fut in as_completed(futures):
