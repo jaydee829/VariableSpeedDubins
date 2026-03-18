@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "variable-speed-dubins"
+version = "0.1.0"
+description = "Python port of the Variable Speed Dubins path planner"
+requires-python = ">=3.10"
+dependencies = [
+    "casadi>=3.6",
+    "numpy>=1.24",
+    "threadpoolctl>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "hypothesis>=6.0",
+    "ruff>=0.4",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--tb=short"
+markers = ["slow: marks tests as slow (deselect with '-m not slow')"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["vsd"]

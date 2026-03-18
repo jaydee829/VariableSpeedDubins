@@ -1,0 +1,27 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# ---------- Testing & coverage ----------
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# ---------- Tools ----------
+.claude/
+.github/
+
+# ---------- Build outputs (C++) ----------
+*.pdf
+bin/
+lib/
+*.m
+*.lp
+*.out
+
+.gemini/
+gha-creds-*.json
